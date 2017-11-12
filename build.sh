@@ -10,7 +10,7 @@ set -e -o pipefail
 DEFCONFIG=$defconfig
 NAME=Team-BH
 VERSION=v1
-DEVICE=$code_name
+DEVICE=i9500
 OWNER=4yush5663
 NOW=`date "+%d%m%Y-%H%M%S"`
 
@@ -20,8 +20,8 @@ sleep 2
 echo "Enter config file name "
 read $config
 sleep 2
-echo "Now enter dvice code name"
-read $code_name
+#echo "Now enter dvice code name"
+#read $code_name
 sleep 2
 
 export CROSS_COMPILE=$toolchain
@@ -34,18 +34,19 @@ MODULES=${KERNEL_PATH}/drivers
 
 JOBS=`grep processor /proc/cpuinfo | wc -l`
 
-function make_zip() {
-	cd ${KERNEL_PATH}/kernel_zip
-	zip -r ${KERNEL_ZIP_NAME}.zip ./
-	mv ${KERNEL_ZIP_NAME}.zip ${KERNEL_PATH}
-}
+$boot= 
 
 function build_kernel() {
 	make ${DEFCONFIG}
 	make -j${JOBS}
 	find $
-	#find ${KERNEL_PATH}/drivers -name "*.ko" -exec cp -f {} ${KERNEL_ZIP}/system/lib/modules \;
-	#find ${KERNEL_PATH} -name zImage -exec cp -f {} ${KERNEL_ZIP}/tools \;
+	find ${KERNEL_PATH}/drivers -name "*.ko" -exec cp -f {} ${KERNEL_ZIP}/system/lib/modules \;
+	find ${KERNEL_PATH} -name zImage -exec cp -f {} ${KERNEL_ZIP}/tools \;
+	cp -rf $boot ${KERNEL_ZIP}/;
+	cd ${KERNEL_PATH}/kernel_zip
+	zip -r ${KERNEL_ZIP_NAME}.zip ./
+	mv ${KERNEL_ZIP_NAME}.zip ${KERNEL_PATH}
+	
 }
 
 COLOR_RED=$(tput bold)$(tput setaf 1)
@@ -70,21 +71,9 @@ echo "================================================"
 echo -e $COLOR_BLUE"               Function menu flag"$COLOR_NEUTRAL
 echo "================================================"
 echo
-echo "  1  = Delete .config & delete .zip"
-echo "  2  = Start building kernel"
-echo "  3  = Make zImage to flashable.zip" 
-echo "  4  = Do 2-3 process"
-echo
-echo "================================================"
-echo -e $COLOR_YELLOW"NOTE : JUST CHOOSE THE NUMBER,"
-echo "       AND WAIT UNTIL PROCESS DONE!"
-echo "================================================"
-read -p "$COLOR_BLUE Whats Your Choice? " -n 1 -s x
-echo -e $COLOR_GREEN
 
 echo "Hit enter to build"
-read enter 
-	
-	esac
+read enter
+build_kernel
 
 exit
