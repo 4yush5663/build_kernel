@@ -43,15 +43,9 @@ function make_zip() {
 function build_kernel() {
 	make ${DEFCONFIG}
 	make -j${JOBS}
-	find ${KERNEL_PATH}/drivers -name "*.ko" -exec cp -f {} ${KERNEL_ZIP}/system/lib/modules \;
-	find ${KERNEL_PATH} -name zImage -exec cp -f {} ${KERNEL_ZIP}/tools \;
-}
-
-function make_clean(){
-	find ${KERNEL_PATH} -name zImage -exec rm -f {} \;
-	find ${KERNEL_PATH} -name "*.ko" -exec rm -f {} \;
-	make mrproper && make clean
-	rm  ${KERNEL_PATH}/*.zip
+	find $
+	#find ${KERNEL_PATH}/drivers -name "*.ko" -exec cp -f {} ${KERNEL_ZIP}/system/lib/modules \;
+	#find ${KERNEL_PATH} -name zImage -exec cp -f {} ${KERNEL_ZIP}/tools \;
 }
 
 COLOR_RED=$(tput bold)$(tput setaf 1)
@@ -88,24 +82,9 @@ echo "================================================"
 read -p "$COLOR_BLUE Whats Your Choice? " -n 1 -s x
 echo -e $COLOR_GREEN
 
-case "$x" in
-	1)
-		make_clean
-		exit
-		;;
-	2)
-		build_kernel
-		exit
-		;;
-	3)
-		make_zip
-		exit
-		;;
-	4)
-		build_kernel
-		make_zip
-		exit
-		;;
+echo "Hit enter to build"
+read enter 
+	
 	esac
 
 exit
